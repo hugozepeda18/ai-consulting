@@ -6,21 +6,28 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rayo Innovación y Consultoría en IA</title>
+<title>Rayo Innovación y Consultoría con IA</title>
 <meta name="description" content="Consultoría de IA: creamos y mantenemos apps, y desarrollamos tu espacio de trabajo personal con IA.">
 <style>
   :root { --bg:#0b0d12; --card:#151922; --text:#e8eaf0; --muted:#9aa3b2; --accent:#7c5cff; --accent2:#22d3ee; }
   * { box-sizing:border-box; margin:0; }
   body { font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+  #net { position:fixed; inset:0; z-index:-1; pointer-events:none; }
   a { color:inherit; }
   .wrap { max-width:1080px; margin:0 auto; padding:0 20px; }
-  header { display:flex; justify-content:space-between; align-items:center; padding:20px 0; }
+  html { scroll-behavior:smooth; }
+  @media (prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+  header { display:flex; justify-content:space-between; align-items:center; padding:16px 0; position:sticky; top:0; z-index:10; }
   .logo { font-weight:700; font-size:1.2rem; }
   .logo span { color:var(--accent); }
-  nav { display:flex; gap:20px; align-items:center; }
-  nav a { text-decoration:none; color:var(--muted); }
-  nav a:hover { color:var(--text); }
-  .lang { background:none; border:1px solid #333a48; color:var(--text); border-radius:6px; padding:4px 10px; cursor:pointer; font:inherit; }
+  /* Floating pill menu: rounded, blurred glass, soft shadow. On phones it docks at the bottom like an app tab bar. */
+  nav { display:flex; gap:4px; align-items:center; padding:6px; border-radius:999px; background:rgb(21 25 34 / .75); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); border:1px solid rgb(255 255 255 / .08); box-shadow:0 10px 30px rgb(0 0 0 / .4); }
+  nav a { display:flex; align-items:center; gap:6px; text-decoration:none; color:var(--muted); padding:8px 14px; border-radius:999px; font-size:.95rem; transition:background .2s,color .2s; }
+  nav a[aria-current] { color:var(--text); background:rgb(124 92 255 / .25); }
+  nav a:hover, nav a:focus-visible { color:var(--text); background:rgb(255 255 255 / .08); }
+  nav svg { width:18px; height:18px; flex:none; }
+  .lang { background:var(--accent); border:0; color:#fff; border-radius:999px; padding:8px 14px; cursor:pointer; font:inherit; font-size:.85rem; font-weight:600; }
+  section, #home { scroll-margin-top:80px; }
   .hero { padding:100px 0 80px; text-align:center; }
   h1 { font-size:clamp(2.2rem,6vw,3.8rem); line-height:1.1; margin-bottom:20px; }
   h1 em { font-style:normal; background:linear-gradient(90deg,var(--accent),var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
@@ -41,8 +48,8 @@
   .project .info { display:flex; flex-direction:column; gap:12px; }
   @media (max-width:800px) { .project { grid-template-columns:1fr; } }
   @media (prefers-reduced-motion:reduce) { .project .shot { transition:none; } }
-  .project .tags { display:flex; flex-wrap:wrap; gap:6px; }
-  .project .tags span { font-size:.8rem; color:var(--accent2); border:1px solid #233a44; border-radius:99px; padding:2px 10px; }
+  .tags { display:flex; flex-wrap:wrap; gap:6px; }
+  .tags span { font-size:.8rem; color:var(--accent2); border:1px solid #233a44; border-radius:99px; padding:2px 10px; }
   .project .info a { color:var(--accent2); font-weight:600; text-decoration:none; }
   .step b { color:var(--accent2); font-size:1.4rem; display:block; }
   .cta { text-align:center; background:var(--card); border-radius:16px; padding:60px 20px; }
@@ -57,42 +64,63 @@
   input, select, textarea { font:inherit; color:var(--text); background:var(--bg); border:1px solid #333a48; border-radius:8px; padding:10px; }
   input:focus, select:focus, textarea:focus { outline:2px solid var(--accent); border-color:transparent; }
   input:user-invalid, textarea:user-invalid { border-color:#f87171; }
+  .row { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; }
   .actions { display:flex; gap:12px; justify-content:flex-end; margin-top:6px; }
   .ghost { background:none; border:1px solid #333a48; color:var(--text); border-radius:8px; padding:14px 20px; cursor:pointer; font:inherit; }
-  @media (max-width:600px) { nav a { display:none; } }
+  .card ul { color:var(--muted); padding-left:20px; margin-top:10px; }
+  .card .tags { margin:14px 0; }
+  .card p a { color:var(--accent2); font-weight:600; }
+  .note { font-size:.9rem; border-left:3px solid var(--accent); padding-left:12px; margin-top:12px; }
+  .lead { color:var(--muted); font-size:1.15rem; text-align:center; max-width:720px; margin:-20px auto 40px; }
+  .lead strong { color:var(--text); }
+  dialog { margin:auto; } /* the global margin:0 reset was pinning it to the left */
+  .x { position:absolute; top:14px; right:14px; width:36px; height:36px; border-radius:50%; border:1px solid #333a48; background:var(--bg); color:var(--text); font-size:1.3rem; line-height:1; cursor:pointer; }
+  .x:hover { background:#232937; }
+  @media (max-width:600px) {
+    body { padding-bottom:90px; }
+    nav { position:fixed; bottom:16px; left:50%; transform:translateX(-50%); width:calc(100% - 32px); max-width:440px; justify-content:space-around; }
+    nav a { flex-direction:column; gap:2px; padding:8px 10px; font-size:.7rem; }
+    nav svg { width:22px; height:22px; }
+  }
 </style>
 </head>
 <body>
+<canvas id="net" aria-hidden="true"></canvas>
 <div class="wrap">
   <header>
-    <div class="logo">⚡ <span data-i18n="brand">Rayo</span></div>
+    <div class="logo">⚡ <span data-i18n="brand">Rayo AI</span></div>
     <nav>
-      <a href="#services" data-i18n="navServices">Servicios</a>
-      <a href="#projects" data-i18n="navProjects">Proyectos</a>
-      <a href="#process" data-i18n="navProcess">Proceso</a>
-      <a href="#contact" data-i18n="navContact">Contacto</a>
+      <a href="#home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span data-i18n="navHome">Inicio</span></a>
+      <a href="#services"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg><span data-i18n="navServices">Servicios</span></a>
+      <a href="#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="14" rx="3"/><path d="M8 21h8"/></svg><span data-i18n="navProjects">Proyectos</span></a>
+      <a href="#process"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg><span data-i18n="navProcess">Proceso</span></a>
+      <a href="#contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L3 21l1.9-6.4A8 8 0 1 1 21 12z"/></svg><span data-i18n="navContact">Contacto</span></a>
       <button class="lang" id="lang-toggle" aria-label="Change language">EN</button>
     </nav>
   </header>
 
-  <div class="hero">
+  <div class="hero" id="home">
     <h1 data-i18n="heroTitle">Llevamos tu negocio a la era de la <em>Inteligencia Artificial</em></h1>
-    <p data-i18n="heroText">Construimos, mantenemos y potenciamos aplicaciones con IA para que tú te enfoques en crecer.</p>
+    <p data-i18n="heroText">La IA está haciendo el software más accesible. Creamos apps tan personalizadas como tu negocio lo necesite, a un precio justo.</p>
     <a class="btn" href="#contact" data-i18n="heroCta">Agenda una consulta gratis</a>
   </div>
 
   <section id="services">
     <h2 data-i18n="servicesTitle">Nuestros servicios</h2>
+    <p class="lead" data-i18n="servicesLead">La IA abarata el desarrollo de software. <strong>No pagues por software sobrevalorado: paga un precio justo por software hecho a tu medida</strong>, tan personalizado como quieras.</p>
     <div class="grid">
       <div class="card">
-        <div class="icon">🚀</div>
-        <h3 data-i18n="s1Title">Desarrollo de apps</h3>
-        <p data-i18n="s1Text">Diseñamos y construimos aplicaciones web y móviles con IA integrada, desde el prototipo hasta producción.</p>
+        <div class="icon">📱</div>
+        <h3 data-i18n="s1Title">Apps web y móviles</h3>
+        <p data-i18n="s1Text">Aplicaciones web y móviles alojadas y listas para usar, como <a href="https://aulapuntual.mx" target="_blank" rel="noopener noreferrer">AulaPuntual</a>. Nos encargamos de todo el ciclo:</p>
+        <div class="tags" data-i18n="s1List"><span>Diseño</span><span>Desarrollo</span><span>Hosting</span><span>Mantenimiento</span><span>Mejora continua</span></div>
+        <p class="note" data-i18n="s1Note">Cada servicio tiene su propio precio; lo definimos juntos en la entrevista inicial.</p>
       </div>
       <div class="card">
-        <div class="icon">🛠️</div>
-        <h3 data-i18n="s2Title">Mantenimiento de apps</h3>
-        <p data-i18n="s2Text">Monitoreo, actualizaciones, corrección de errores y mejoras continuas para que tu app siempre funcione.</p>
+        <div class="icon">🤖</div>
+        <h3 data-i18n="s2Title">Apps con agentes de IA</h3>
+        <p data-i18n="s2Text">IA agéntica: agentes y subagentes que razonan, usan herramientas y ejecutan tareas completas por ti.</p>
+        <p class="note" data-i18n="s2Note">No todos los sistemas necesitan agentes. Los agentes y subagentes son costosos de operar, así que evaluamos cada caso con cuidado para confirmar que la inversión vale la pena.</p>
       </div>
       <div class="card">
         <div class="icon">🧠</div>
@@ -132,11 +160,12 @@
     <div class="cta">
       <h2 data-i18n="ctaTitle">¿Listo para empezar?</h2>
       <p data-i18n="ctaText">Cuéntanos tu idea y te respondemos en menos de 24 horas.</p>
-      <button class="btn" id="open-form" data-i18n="ctaBtn">Escríbenos</button>
+      <button class="btn" id="open-form" data-i18n="ctaBtn">Cuéntanos de ti</button>
     </div>
   </section>
 
   <dialog id="contact-dialog" aria-labelledby="form-title">
+    <button type="button" class="x close" aria-label="Cerrar / Close">×</button>
     <h2 id="form-title" data-i18n="formTitle">Cuéntanos sobre tu proyecto</h2>
     <form id="contact-form">
       <label><span data-i18n="fName">Nombre *</span>
@@ -154,29 +183,48 @@
       <label><span data-i18n="fService">Servicio de interés *</span>
         <select name="service" required>
           <option value="" data-i18n="fPick">Selecciona…</option>
-          <option value="build" data-i18n="s1Title">Desarrollo de apps</option>
-          <option value="maintain" data-i18n="s2Title">Mantenimiento de apps</option>
+          <option value="apps" data-i18n="s1Title">Apps web y móviles</option>
+          <option value="agents" data-i18n="s2Title">Apps con agentes de IA</option>
           <option value="workspace" data-i18n="s3Title">Espacio de trabajo personal con IA</option>
           <option value="other" data-i18n="fOther">Otro / no estoy seguro</option>
         </select></label>
-      <label><span data-i18n="fBudget">Presupuesto aproximado (USD)</span>
+      <div class="row">
+      <label><span data-i18n="fBudget">Presupuesto aproximado</span>
         <select name="budget">
           <option value="" data-i18n="fPick">Selecciona…</option>
-          <option value="lt5k">&lt; 5,000</option>
-          <option value="5-20k">5,000 – 20,000</option>
+          <option value="lt1k">&lt; 1,000</option>
+          <option value="1-2k">1,000 – 2,000</option>
+          <option value="2-5k">2,000 – 5,000</option>
+          <option value="5-10k">5,000 – 10,000</option>
+          <option value="10-20k">10,000 – 20,000</option>
           <option value="20-50k">20,000 – 50,000</option>
-          <option value="gt50k">&gt; 50,000</option>
+          <option value="50-100k">50,000 – 100,000</option>
+          <option value="gt100k">&gt; 100,000</option>
         </select></label>
+      <label><span data-i18n="fCurrency">Moneda</span>
+        <select name="currency">
+          <option value="MXN" data-i18n="fMXN">MXN (pesos)</option>
+          <option value="USD" data-i18n="fUSD">USD (dólares)</option>
+        </select></label>
+      <label><span data-i18n="fPeriod">Frecuencia</span>
+        <select name="period">
+          <option value="" data-i18n="fPick">Selecciona…</option>
+          <option value="week" data-i18n="fWeek">Por semana</option>
+          <option value="month" data-i18n="fMonth">Mensual</option>
+          <option value="project" data-i18n="fProject">Por proyecto</option>
+          <option value="year" data-i18n="fYear">Anual</option>
+        </select></label>
+      </div>
       <label><span data-i18n="fDetails">Describe tu empresa o proyecto *</span>
         <textarea name="details" required minlength="20" maxlength="1000" rows="5"></textarea></label>
       <div class="actions">
-        <button type="button" class="ghost" id="close-form" data-i18n="fCancel">Cancelar</button>
+        <button type="button" class="ghost close" data-i18n="fCancel">Cancelar</button>
         <button type="submit" class="btn" data-i18n="fSend">Enviar</button>
       </div>
     </form>
   </dialog>
 
-  <footer>© <span id="year"></span> <span data-i18n="brandFull">Rayo Innovación y Consultoría en IA</span> · <span data-i18n="rights">Todos los derechos reservados.</span></footer>
+  <footer>© <span id="year"></span> <span data-i18n="brandFull">Rayo Innovación y Consultoría con IA</span> · <span data-i18n="rights">Todos los derechos reservados.</span></footer>
 </div>
 
 <script src="main.js"></script>
