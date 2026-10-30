@@ -23,7 +23,7 @@ Everything served lives in `public/`. `functions/` stays at the repo root (Pages
 
 **CSP lives in two places that must stay in sync:** the `<meta http-equiv>` in `index.html` (for local preview) and `_headers` (production; also adds `frame-ancestors`, HSTS, etc.). No inline scripts or `on*` attributes; all JS goes in `main.js`. External images/fonts/scripts need CSP changes first.
 
-**Projects section.** Portfolio of the firm's real work (currently AulaPuntual, screenshot at `public/img/aulapuntual.jpg`, taken with headless Chrome at 1280×800). Another project is pending hosting; add it as another `.card.project` in the same grid.
+**Projects section.** Portfolio of the firm's real work (AulaPuntual and Analytika, screenshots in `public/img/`, taken with headless Chrome at 1280×800). Add new ones as another `.card.project` in the same grid.
 
 ## Gotchas
 

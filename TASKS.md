@@ -1,5 +1,23 @@
 # Tasks
 
+## Next: hide the Gmail address behind Cloudflare Email Routing (2026-10-29)
+
+**Why:** `public/main.js` (`TO`) exposes `hugozepeda6@gmail.com` to anyone/bots. An alias on the
+domain forwards to Gmail and can be changed or disabled without touching the inbox.
+
+**You (Cloudflare dashboard, ~5 min):**
+1. `rayoaiconsulting.mx` → Email → Email Routing → Get started.
+2. Custom address (e.g. `contacto`) → Send to an email → `hugozepeda6@gmail.com`.
+3. Click the verification link Cloudflare sends to Gmail.
+4. "Add records and enable" (MX + SPF TXT, automatic).
+5. Test: email the alias from another account, confirm it lands in Gmail.
+6. Turn on 2-step verification for the Gmail account if it isn't already.
+
+**Claude (after step 5, tell it the alias):** set `TO` in `public/main.js` to the alias, grep
+`public/` to confirm the Gmail address appears nowhere else, run the syntax check.
+
+---
+
 Claude Code config audit (project level), 2026-10-16. Plan only; nothing below is created yet.
 
 ## 1. `.claude/settings.json` — allowlist + deny rules 🟢

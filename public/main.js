@@ -1,7 +1,8 @@
 const en = {
   brand: "Thunderbolt AI", brandFull: "Thunderbolt Innovation and AI Consulting",
   navHome: "Home", navServices: "Services", navProjects: "Projects", navProcess: "Process",
-  projectsTitle: "Projects", pr1Tag: "Education",
+  projectsTitle: "Projects", pr1Tag: "Education", pr2Tag: "Data", pr2Tag2: "Diagnostic",
+  pr2Text: "Commercial intelligence and operational health: a pilot diagnostic that analyzes historical sales and purchasing data to show which products, channels and customers drive profitability, where customers leak and sales opportunities hide, and which margins vary unjustifiably by supplier or category. It delivers a report with clear charts and concrete recommendations, with no platform to learn.",
   pr1Text: "Entry check-in for schools in Mexico: students tap their ID card and their guardian instantly gets a WhatsApp alert. Includes real-time attendance for school leadership, alerts for frequent tardiness and the official SEP school calendar.", navContact: "Contact",
   heroTitle: "We bring your business into the age of <em>Artificial Intelligence</em>",
   heroText: "AI is making software more affordable. We build apps as personalized as your business needs, at a fair price.",
